@@ -42,6 +42,6 @@ Explanation of Parameters:
   - **IMAGE_FOLDER**: Directory path containing the images to be processed.
   - **RESULT_FILE**: Path to the file where the results will be saved in CSV format.
   - **GROUP_PATTERN**: Regular expression used to group images for the analyze function (e.g., <code>"^.{7}"</code> - based on the first 7 characters of the file names).
-  - **FRONT_PATTERN**: Regular expression to identify front images within each group (e.g., <code>".*front.*"</code> - files in the group that contains the "front" word).
-  - **REAR_PATTERN**: Regular expression to identify rear images within each group (e.g., <code>".*rear.*"</code> - files in the group that contains the "rear" word).
-  - **OVERVIEW_PATTERN**: Regular expression to identify overview images within each group (e.g., <code>".*scene.*"</code> - files in the group that contains the "scene" word).
+  - **FRONT_PATTERN**: Regular expression to identify front images within each group (e.g., <code>".\*front.\*"</code> - files in the group that contains the "front" word).
+  - **REAR_PATTERN**: Regular expression to identify rear images within each group (e.g., <code>".\*rear.\*"</code> - files in the group that contains the "rear" word).
+  - **OVERVIEW_PATTERN**: Regular expression to identify overview images within each group (e.g., <code>".\*scene.\*"</code> - files in the group that contains the "scene" word).
