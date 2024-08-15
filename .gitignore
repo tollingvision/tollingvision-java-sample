@@ -1,0 +1,13 @@
+**/target/
+**/logs/
+**/nb-configuration.xml
+**/nbactions.xml
+**/pom.xml.versionsBackup
+**/.flattened-pom.xml
+**/.classpath
+**/.project
+**/*.tar.gz
+**/*.zip
+**/*.bgv
+/nbproject/
+**/*.csv
