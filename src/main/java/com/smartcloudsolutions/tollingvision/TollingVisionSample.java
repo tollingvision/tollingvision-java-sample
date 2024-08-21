@@ -15,18 +15,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.google.protobuf.ByteString;
-import com.smartcloudsolutions.tollingvision.ErrorResponse;
-import com.smartcloudsolutions.tollingvision.EventRequest;
-import com.smartcloudsolutions.tollingvision.EventResponse;
-import com.smartcloudsolutions.tollingvision.EventResult;
-import com.smartcloudsolutions.tollingvision.Image;
-import com.smartcloudsolutions.tollingvision.TollingVisionServiceGrpc;
-import com.smartcloudsolutions.tollingvision.Mmr;
-import com.smartcloudsolutions.tollingvision.PartialResult;
-import com.smartcloudsolutions.tollingvision.Plate;
-import com.smartcloudsolutions.tollingvision.SearchRequest;
-import com.smartcloudsolutions.tollingvision.SearchResponse;
-import com.smartcloudsolutions.tollingvision.Status;
 import com.smartcloudsolutions.tollingvision.TollingVisionServiceGrpc.TollingVisionServiceStub;
 
 import io.grpc.ManagedChannel;
