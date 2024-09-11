@@ -24,6 +24,13 @@ import io.grpc.stub.StreamObserver;
 
 public class TollingVisionSample {
 
+    /**
+     * Main method to demonstrate how to use the TollingVision gRPC service.
+     * 
+     * @param args
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public static void main(String[] args) throws IOException, InterruptedException {
         if (args.length != 9) {
             System.out.println(
@@ -31,6 +38,7 @@ public class TollingVisionSample {
             System.exit(1);
         }
 
+        long now = System.currentTimeMillis();
         String serviceUrl = args[0];
         boolean secured = Boolean.parseBoolean(args[1]);
         int maxParallelRequests = Integer.parseInt(args[2]);
@@ -68,6 +76,7 @@ public class TollingVisionSample {
                 String group = entry.getKey();
                 List<File> files = entry.getValue();
 
+                long nowGroup = System.currentTimeMillis();
                 System.out.println("Processing group: " + group);
 
                 EventRequest eventRequest = createEventRequest(files, frontRegex, rearRegex, overviewRegex);
@@ -129,9 +138,12 @@ public class TollingVisionSample {
                                         + ". Partial result (Error): " + error);
                             } else if (partialResult.hasResult()
                                     && partialResult.getResult().getStatus() == Status.RESULT) {
-                                SearchResponse searchResponse = partialResult.getResult();
-                                System.out.println((partialResult.getResultIndex() + 1) + "/" + requestCount
-                                        + ". Partial result (SearchResponse): " + searchResponse);
+                                /*
+                                 * SearchResponse searchResponse = partialResult.getResult();
+                                 * System.out.println((partialResult.getResultIndex() + 1) + "/" + requestCount
+                                 * + ". Partial result (SearchResponse): " + searchResponse);
+                                 */
+
                             }
                         }
                     }
@@ -147,6 +159,7 @@ public class TollingVisionSample {
                     public void onCompleted() {
                         latch.countDown();
                         semaphore.release();
+                        System.out.println(group + " time: " + (System.currentTimeMillis() - nowGroup) + " ms");
                     }
                 });
             }
@@ -154,6 +167,7 @@ public class TollingVisionSample {
         } finally {
             channel.shutdown();
         }
+        System.out.println("Total time: " + (System.currentTimeMillis() - now) + " ms");
     }
 
     private static List<File> listFilesRecursively(File folder) {
@@ -225,8 +239,9 @@ public class TollingVisionSample {
     }
 
     private static String formatPlate(Plate plate) {
-        return String.format("%s %s %s %s (%d)", plate.getText(), plate.getCountry(), plate.getState(),
-                plate.getCategory(), plate.getConfidence());
+        return String.format("%s %s %s %s %d%% (text: %d%%|state: %d%%)", plate.getText(), plate.getCountry(),
+                plate.getState(), plate.getCategory(), plate.getConfidence(), plate.getTextConfidence(),
+                plate.getPlateTypeConfidence());
     }
 
     private static String formatMmr(Mmr mmr) {
