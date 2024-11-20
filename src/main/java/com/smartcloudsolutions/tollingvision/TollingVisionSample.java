@@ -89,8 +89,8 @@ public class TollingVisionSample {
                 stub.analyze(eventRequest, new StreamObserver<EventResponse>() {
                     @Override
                     public void onNext(EventResponse response) {
-                        int requestCount = eventRequest.getFrontRequestCount() + eventRequest.getRearRequestCount()
-                                + eventRequest.getOverviewRequestCount();
+                        int requestCount = eventRequest.getFrontImageCount() + eventRequest.getRearImageCount()
+                                + eventRequest.getOverviewImageCount();
                         if (response.hasEventResult()) {
                             EventResult result = response.getEventResult();
                             try {
@@ -202,9 +202,9 @@ public class TollingVisionSample {
         Pattern rearPattern = Pattern.compile(rearRegex);
         Pattern overviewPattern = Pattern.compile(overviewRegex);
 
-        List<SearchRequest> frontRequests = new ArrayList<>();
-        List<SearchRequest> rearRequests = new ArrayList<>();
-        List<SearchRequest> overviewRequests = new ArrayList<>();
+        List<Image> frontImages = new ArrayList<>();
+        List<Image> rearImages = new ArrayList<>();
+        List<Image> overviewImages = new ArrayList<>();
 
         for (File file : files) {
             byte[] imageData;
@@ -215,26 +215,25 @@ public class TollingVisionSample {
                 continue;
             }
 
-            SearchRequest.Builder searchRequestBuilder = SearchRequest.newBuilder()
-                    .setImage(Image.newBuilder().setData(ByteString.copyFrom(imageData)).build());
+            Image img = Image.newBuilder().setData(ByteString.copyFrom(imageData)).build();
 
             if (overviewPattern.matcher(file.getName()).find()) {
-                overviewRequests.add(searchRequestBuilder.setMakeAndModelRecognition(true).build());
+                overviewImages.add(img);
             } else if (frontPattern.matcher(file.getName()).find()) {
-                frontRequests.add(searchRequestBuilder.build());
+                frontImages.add(img);
             } else if (rearPattern.matcher(file.getName()).find()) {
-                rearRequests.add(searchRequestBuilder.build());
+                rearImages.add(img);
             }
         }
 
-        if (frontRequests.isEmpty() && rearRequests.isEmpty() && overviewRequests.isEmpty()) {
+        if (frontImages.isEmpty() && rearImages.isEmpty() && overviewImages.isEmpty()) {
             return null;
         }
 
         return EventRequest.newBuilder()
-                .addAllFrontRequest(frontRequests)
-                .addAllRearRequest(rearRequests)
-                .addAllOverviewRequest(overviewRequests)
+                .addAllFrontImage(frontImages)
+                .addAllRearImage(rearImages)
+                .addAllOverviewImage(overviewImages)
                 .build();
     }
 
