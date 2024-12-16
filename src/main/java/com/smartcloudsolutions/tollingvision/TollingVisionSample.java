@@ -245,6 +245,6 @@ public class TollingVisionSample {
 
     private static String formatMmr(Mmr mmr) {
         return String.format("%s %s (%s %s %s %s)", mmr.getMake(), mmr.getModel(), mmr.getGeneration(),
-                mmr.getCategory(), mmr.getBodyType(), mmr.getViewPoint(), mmr.getColor());
+                mmr.getCategory(), mmr.getBodyType(), mmr.getViewPoint(), mmr.getColorName());
     }
 }
