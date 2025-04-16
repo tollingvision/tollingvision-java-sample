@@ -70,14 +70,16 @@ public class TollingVisionSample {
             csvWriter.append(
                     "Front Image,Rear Image,Overview Image,Node,Front Plate,Front Plate Alternative,Rear Plate,Rear Plate Alternative,MMR,MMR Alternative\n");
 
+            int i = 0;
             for (Map.Entry<String, List<File>> entry : groupedImages.entrySet()) {
+                i++;
                 semaphore.acquire();
 
                 String group = entry.getKey();
                 List<File> files = entry.getValue();
 
                 long nowGroup = System.currentTimeMillis();
-                System.out.println("Processing group: " + group);
+                System.out.println("Processing " + i + "/" + groupedImages.size() + ". group: " + group);
 
                 EventRequest eventRequest = createEventRequest(files, frontRegex, rearRegex, overviewRegex);
                 if (eventRequest == null) {
@@ -124,7 +126,8 @@ public class TollingVisionSample {
                                 String mmrAlt = result.getMmrAlternativeList().stream()
                                         .map(TollingVisionSample::formatMmr).collect(Collectors.joining("|"));
 
-                                csvWriter.append(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+                                csvWriter.append(String.format(
+                                        "\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"\n",
                                         frontFiles, rearFiles, overviewFiles, result.getNode(),
                                         frontPlate, frontPlateAlt, rearPlate, rearPlateAlt, mmr, mmrAlt));
                             } catch (IOException e) {
@@ -192,7 +195,7 @@ public class TollingVisionSample {
 
         return files.stream().collect(Collectors.groupingBy(file -> {
             Matcher matcher = groupPattern.matcher(file.getName());
-            return matcher.find() ? matcher.group() : "ungrouped";
+            return matcher.find() ? matcher.group(1) : "ungrouped";
         }));
     }
 
